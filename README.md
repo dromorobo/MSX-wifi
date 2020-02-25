@@ -30,6 +30,15 @@ Preparation:
 - On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off)
 - Download Fossil driver for MSX
 
+- Initially the ESP creates its own Wifi AP. You can connect to this AP 
+  using a browser. Changing the wifi setting can be done via a config.html
+  to be found via <http://192.168.4.1/config.html> when you have connected
+  to the ESP wifi.
+- fill in ssid, password and leave client "empty".
+- information will be stored on ESP in wifi.cfg, so next start of ESP will
+  ensure reconnect. (Please Note: password of wifi network is stored in 
+  clear text in wifi.cfg!!!)
+  
 Usage
 - Start MSX
 - Go to MSX-DOS
