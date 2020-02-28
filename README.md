@@ -4,7 +4,7 @@ MSX wifi (ESP8266 via RS232)
 Add a wifi interface to an MSX computer, using a modified NMS1250 modem cartridge. 
 All modem specific components have been removed and an ESP8266 with a 5V adapter
 has been connected directly to the Z8530 chip (basically this works also for other
-modem cartridges and RS232 cartridges.
+modem cartridges and RS232 cartridges).
 
 Hardware
 - NMS1250 modem cartridge (or other)
@@ -22,7 +22,8 @@ Software for MSX
 - Sample program ESP.PAS to send commands
 
 Preparation:
-- modify NMS1250 interface: connect ESP8266 with 5V adapter to Z8530
+- modify NMS1250 interface
+- connect ESP8266 with 5V adapter to Z8530
 - flash ESP8266 with NodeMCU firmware
 - copy lua files to ESP flash filesystem
 - rename setup.lua to init.lua to ensure automatic startup
