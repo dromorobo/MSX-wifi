@@ -47,8 +47,8 @@ Usage
 - Run ESP.COM
 
 - commands
-  - ESP getip
-  - ESP getmask
-  - ESP whois <host>
+  - ESP get ip
+  - ESP get netmask
+  - ESP whois \<host\>
     (example ESP whois www.google.com)
     
