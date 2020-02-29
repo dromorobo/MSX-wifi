@@ -48,13 +48,12 @@ Start MSX and configure Wifi on ESP
     clear text in wifi.cfg!!!)
   
 USAGE
-- Start MSX
-- Go to MSX-DOS
-- Install Fossil driver by running DRIVER.COM
-- Go back to MSX-DOS (from MSX Basic)
-- Run ESP.COM
+- Start MSX in MSX-DOS
+- Install Fossil driver by running DRIVER.COM (MSX will end up in BASIC)
+- Go back to MSX-DOS
+- Run ESP.COM wit one of the following commands
 
-- commands
+- Commands
   - ESP get ip
   - ESP get netmask
   - ESP whois \<host\>
