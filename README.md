@@ -22,9 +22,9 @@ Software for MSX
 PREPARATION
 
 Prepare ESP
-- flash ESP8266 with NodeMCU firmware
-- copy lua files to ESP flash filesystem
-- rename setup.lua to init.lua to ensure automatic startup
+- Flash ESP8266 with NodeMCU firmware
+- Copy lua files to ESP flash filesystem
+- Rename setup.lua to init.lua to ensure automatic startup
 
 Prepare NMS1250 interface
 - (optional) remove all modem components form NMS1250
@@ -38,9 +38,7 @@ Start MSX and configure Wifi on ESP
 - Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html\>, the password is \<12345678\
 - Wwhen you have connected to the ESP wifi config page:
   - fill in ssid, password and leave client "empty".
-  - information will be stored on ESP in wifi.cfg, so next start of ESP will
-    ensure reconnect. (Please Note: password of wifi network is stored in 
-    clear text in wifi.cfg!!!)
+  - information will be stored on ESP in wifi.cfg, so next start of ESP will ensure reconnect. (Please Note: password of wifi network is stored in clear text in wifi.cfg!!!)
   
 USAGE
 - Start MSX in MSX-DOS
