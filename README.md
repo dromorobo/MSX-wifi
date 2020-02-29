@@ -21,26 +21,33 @@ Software for MSX
 - Turbo Pascal 3.0
 - Sample program ESP.PAS to send commands
 
-Preparation:
-- modify NMS1250 interface
-- connect ESP8266 with 5V adapter to Z8530
+PREPARATION
+
+Prepare ESP
 - flash ESP8266 with NodeMCU firmware
 - copy lua files to ESP flash filesystem
 - rename setup.lua to init.lua to ensure automatic startup
 
-- On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off)
-- Download Fossil driver for MSX
+Prepare NMS1250 interface
+- (optional) remove all modem components form NMS1250
+- connect ESP8266 with 5V adapter or level shifters to Z8530
 
+Prepare MSX
+- On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off)
+- Download Erik Maas'Fossil driver for MSX
+
+Start MSX and configure Wifi on ESP
 - Initially the ESP creates its own Wifi AP. You can connect to this AP 
   using a browser. Changing the wifi setting can be done via a config.html
-  to be found via <http://192.168.4.1/config.html> when you have connected
-  to the ESP wifi.
-- fill in ssid, password and leave client "empty".
-- information will be stored on ESP in wifi.cfg, so next start of ESP will
-  ensure reconnect. (Please Note: password of wifi network is stored in 
-  clear text in wifi.cfg!!!)
+  to be found via \<http://192.168.4.1/config.html\>, the password is
+  \<12345678\
+- Wwhen you have connected to the ESP wifi config page:
+  - fill in ssid, password and leave client "empty".
+  - information will be stored on ESP in wifi.cfg, so next start of ESP will
+    ensure reconnect. (Please Note: password of wifi network is stored in 
+    clear text in wifi.cfg!!!)
   
-Usage
+USAGE
 - Start MSX
 - Go to MSX-DOS
 - Install Fossil driver by running DRIVER.COM
