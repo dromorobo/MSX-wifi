@@ -4,12 +4,14 @@
 -- Setup uart, make permanent (last '1' makes permanent))
 -- (uart,bps,databits,parity,stopbits,echo,permanent = 1)
 
-uart.setup(0,2400,8,0,1,0,1)
+-- uart.setup(0,2400,8,0,1,0,1)
 
 -- When '\r' is received, read data and process
 
-VERSION = "0.01"
-EOT = 0x04         -- EOT = End of Transmission
+local VERSION = "0.01a"
+local EOT = 0x04         -- EOT = End of Transmission
+
+local http_buffer = nil
 
 function trim(s)
   -- trim all heading non-alphanumeric characters
@@ -45,7 +47,7 @@ uart.on("data", "\r",
       trim(what)
       if (string.find(what, "version") ~= nil)
       then
-        uart.write(0, version)
+        uart.write(0, VERSION)
         uart.write(0, EOT)
         
       elseif (string.find(data, "ip") ~= nil)
@@ -81,18 +83,32 @@ uart.on("data", "\r",
       then
         net.dns.resolve(fqdn, function(sk, ip)
           if (ip ~= nil) 
-          then uart.write(0,ip)
-          else uart.write(0,"host not found")
+          then 
+            uart.write(0,ip)
+          else 
+            uart.write(0,"host not found")
           end
           uart.write(0, EOT)
         end)
       end
 
-    elseif (string.find(data, "version") ~= nil)
+    elseif (string.find(data, "http ") ~= nil)
     then 
-      uart.write(0, VERSION)
-      uart.write(0, EOT)
-                            
+      local uri = string.sub(data, 6)
+      local code = nil
+
+      uri = trim(uri)
+      if (uri ~= nil)
+      then
+        http.get("http://" .. uri, nil, function(code, data)
+          if (code < 0) then
+            print("HTTP request failed")
+          else
+            uart.write(0,data)
+            uart.write(0, EOT)
+          end
+        end)
+      end                            
     else 
       uart.write(0, "Incorrect Command")
       uart.write(0, EOT)
