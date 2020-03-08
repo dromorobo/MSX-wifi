@@ -4,7 +4,7 @@
 -- Setup uart, make permanent (last '1' makes permanent))
 -- (uart,bps,databits,parity,stopbits,echo,permanent = 1)
 
-uart.setup(0,2400,8,0,1,0,1)
+-- uart.setup(0,2400,8,0,1,0,1)
 
 -- When '\r' is received, read data and process
 
@@ -163,7 +163,6 @@ uart.on("data", "\r",
         end
 
         host = trim(host)
-        print(host)
 
         if (host ~= nil)
         then
@@ -182,14 +181,14 @@ uart.on("data", "\r",
           -- In case of connection send request
           conn:on("connection", function(sck, c)
             request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. host .. "\r\n\r\n"
-            print(request)
             conn:send(request)
           end)
 
           -- Start connection
           conn:connect(80,host)
         end    
-      end        
+      end
+      uart.write(0, EOT)
                   
     else 
       uart.write(0, "Error 21")
