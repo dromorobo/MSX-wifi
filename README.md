@@ -52,11 +52,12 @@ USAGE
   - get netmask
   
   - whois \<host\>
-    DNS resolve of host, example ESP whois www.google.com
+    DNS resolve of host
+    example "whois www.google.com"
   
   - open http:// \<url\>
     Open HTTP connection to host in url and get uri in url
-    example ESP open http://msx.org
+    example "open http://msx.org"
    
   - show buflength
     Show number of characters in receive buffer
