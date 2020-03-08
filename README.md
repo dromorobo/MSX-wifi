@@ -51,4 +51,7 @@ USAGE
   - ESP get netmask
   - ESP whois \<host\>
     (example ESP whois www.google.com)
+  - ESP http \<url\>
+    (example ESP http www.duck.com)
+    
     
