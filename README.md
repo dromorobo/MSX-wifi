@@ -68,6 +68,6 @@ USAGE
   - readbuffer
     Read the whole buffer at once
    
-  - clearbuffer
+  - <b>clearbuffer</b>
     Clear buffer, size will be 0
    
