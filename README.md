@@ -51,21 +51,21 @@ USAGE
   
   - <b>get netmask</b>
   
-  - <b>whois \<host\> </b> \n
+  - <b>whois \<host\></b>
     DNS resolve of host
     example "whois www.google.com"
   
-  - open http:// \<url\>
+  - <b>open http://\<url\></b>
     Open HTTP connection to host in url and get uri in url
     example "open http://msx.org"
    
-  - show buflength
+  - <b>show buflength</b>
     Show number of characters in receive buffer
   
-  - readchar
+  - <b>readchar</b>
     Read next charaxter in receive buffer
     
-  - readbuffer
+  - <b>readbuffer</b>
     Read the whole buffer at once
    
   - <b>clearbuffer</b>
