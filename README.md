@@ -47,11 +47,11 @@ USAGE
 - Run ESP.COM wit one of the following commands
 
 - Commands
-  - get ip
+  - <b>get ip</b>
   
-  - get netmask
+  - <b>get netmask</b>
   
-  - whois \<host\>
+  - <b>whois \<host\> </b> \n
     DNS resolve of host
     example "whois www.google.com"
   
