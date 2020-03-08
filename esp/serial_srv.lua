@@ -4,7 +4,7 @@
 -- Setup uart, make permanent (last '1' makes permanent))
 -- (uart,bps,databits,parity,stopbits,echo,permanent = 1)
 
--- uart.setup(0,2400,8,0,1,0,1)
+uart.setup(0,2400,8,0,1,0,1)
 
 -- When '\r' is received, read data and process
 
