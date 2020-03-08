@@ -55,8 +55,8 @@ USAGE
     DNS resolve of host
     example "whois www.google.com"
   
-  - <b>open http://\<url\></b>
-    Open HTTP connection to host in url and get uri in url
+  - <b>open http://\<host\>/\<file\></b>
+    Open HTTP connection to \<host\> and get \<file\>
     example "open http://msx.org"
    
   - <b>show buflength</b>
