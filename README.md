@@ -42,21 +42,15 @@ or
 
 Start MSX and configure Wifi on ESP
 - Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html\>, the password is "12345678" (loose the quotes).
-- Wwhen you have connected to the ESP wifi config page:
+- When you have connected to the ESP wifi config page:
   - fill in ssid, password and leave client "empty".
   - information will be stored on ESP in wifi.cfg, so next start of ESP will ensure reconnect. (Please Note: password of wifi network is stored in clear text in wifi.cfg!!!)
   
 USAGE
-- Start MSX in MSX-DOS
-
-- Install Fossil driver by running DRIVER.COM (MSX will end up in BASIC)
-- Go back to MSX-DOS
-- Run ESP.COM wit one of the following commands
+- Start MSX, install Fossil driver and Run ESP.COM with one of the following commands
 
 or
-
-- Start your terminal program
-
+- Start your terminal program, and type one of the following commands
 
 - Commands
   - <b>help</b>
