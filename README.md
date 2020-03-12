@@ -36,6 +36,7 @@ Prepare NMS1250 interface
 Prepare MSX
 - On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off)
 - Download Erik Maas'Fossil driver for MSX
+
 or
 - Start a terminal program that is compatible with your modem/serial interface
 
@@ -47,9 +48,15 @@ Start MSX and configure Wifi on ESP
   
 USAGE
 - Start MSX in MSX-DOS
+
 - Install Fossil driver by running DRIVER.COM (MSX will end up in BASIC)
 - Go back to MSX-DOS
 - Run ESP.COM wit one of the following commands
+
+or
+
+- Start your terminal program
+
 
 - Commands
   - <b>help</b>
