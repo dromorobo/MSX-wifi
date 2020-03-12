@@ -70,9 +70,13 @@ or
     DNS resolve of host
     example "whois www.google.com"
   
-  - <b>open http://\<host\>/\<file\></b>
+  - <b>fetch http://\<host\>/\<file\></b>
     Open HTTP connection to \<host\> and get \<file\>
-    example "open http://msx.org"
+    example "fetch http://msx.org"
+   
+  - <b>fetch https://\<host\>/\<file\></b>
+    Open HTTPS connection to \<host\> and get \<file\>
+    example "fetch https://www.bliekiepedia.nl"
    
   - <b>show buflength</b>
     Show number of characters in receive buffer
