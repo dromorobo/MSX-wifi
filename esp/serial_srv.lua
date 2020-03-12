@@ -6,7 +6,7 @@
 
 -- When '\r' is received, read data and process
 
-local VERSION = "0.03"
+local VERSION = "0.04"
 local BPS = 9600         -- Speed of serial interface
 local EOT = 0x04         -- EOT = End of Transmission
 local what = ""
@@ -42,12 +42,12 @@ end
 if file.exists("serial.cfg")
 then
   file.open("serial.cfg")
-  line = trim(file.readline())
+  line = file.readline()
   BPS = tonumber(line)
   file.close()
 end
 
-if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200) 
+if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200 and BPS~=115200) 
 then
   BPS=9600
 end
@@ -88,8 +88,8 @@ uart.on("data", "\r",
         if file.exists("serial.cfg")
         then
           file.open("serial.cfg")
-          line = trim(file.readline())
-          uart.write(0, "Startup = " .. line .. "\n\r")
+          line = file.readline()
+          uart.write(0, "Startup = " .. line .. "\r")
           file.close()
         end
         uart.write(0, "Running = " .. BPS .. "\n\r")
@@ -189,20 +189,26 @@ uart.on("data", "\r",
       buffer = nil
       uart.write(0, EOT)
 
-    elseif (string.find(data, "open ") ~= nil)
+    elseif (string.find(data, "fetch ") ~= nil)
     then 
-      sloc = string.find(data, " ")
-      what = trim(string.sub(data, sloc+1))
-      if (string.find(what, "http://") ~= nil)
+      what = string.sub(data, 7)
+      if (string.find(what, "https://") ~= nil)
       then
-        what = string.sub(what, 8)
+        what = string.sub(what, 10)
+        https = true
+      elseif (string.find(what, "http://") ~= nil)
+      then
+         what = string.sub(what, 9)
+      end
+      
+      if (http or https)
+      then
         sloc = string.find(what, "/")
         if (sloc ~= nil)
         then
           host = string.sub(what, 1, sloc-1)
           item = string.sub(what,sloc)
           item = trim(item)
-          print(item)
         else
           host = what
           item = "/"
@@ -212,8 +218,14 @@ uart.on("data", "\r",
 
         if (host ~= nil)
         then
-          -- open connection
-          conn = net.createConnection(net.TCP, 0)
+          if http
+          then -- open HTTP connection
+            conn = net.createConnection(net.TCP, 0)
+            port = 80
+          else -- open HTTPS conneciton
+            conn = tls.createConnection()
+            port = 443
+          end
 
           conn:on("receive", function(sck, c)
             if buffer == nil 
@@ -231,7 +243,7 @@ uart.on("data", "\r",
           end)
 
           -- Start connection
-          conn:connect(80,host)
+          conn:connect(port,host)
         end    
       end
       uart.write(0, EOT)
