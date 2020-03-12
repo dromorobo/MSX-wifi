@@ -19,6 +19,9 @@ Software for MSX
 - Turbo Pascal 3.0
 - Sample program ESP.PAS to send commands
 
+or
+- a terminal program that recognizes the interface you use
+
 PREPARATION
 
 Prepare ESP
