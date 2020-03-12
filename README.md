@@ -47,9 +47,18 @@ USAGE
 - Run ESP.COM wit one of the following commands
 
 - Commands
+  - <b>help</b>
+    Show a list of commands
+    
   - <b>get ip</b>
   
   - <b>get netmask</b>
+  
+  - <b>get speed</b>
+    Shows bps rate of serial interface, both running and startup-speed
+    
+  - <b>set speed \<bps\></b>
+    Sets the startup-speed. Will be active after next restart
   
   - <b>whois \<host\></b>
     DNS resolve of host
@@ -70,4 +79,6 @@ USAGE
    
   - <b>clearbuffer</b>
     Clear buffer, size will be 0
-   
+
+  - <b>restart</b>
+    Restarts ESP
