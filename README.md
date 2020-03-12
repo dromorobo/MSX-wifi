@@ -47,27 +47,27 @@ USAGE
 - Run ESP.COM wit one of the following commands
 
 - Commands
-  - get ip
+  - <b>get ip</b>
   
-  - get netmask
+  - <b>get netmask</b>
   
-  - whois \<host\>
+  - <b>whois \<host\></b>
     DNS resolve of host
     example "whois www.google.com"
   
-  - open http:// \<url\>
-    Open HTTP connection to host in url and get uri in url
+  - <b>open http://\<host\>/\<file\></b>
+    Open HTTP connection to \<host\> and get \<file\>
     example "open http://msx.org"
    
-  - show buflength
+  - <b>show buflength</b>
     Show number of characters in receive buffer
   
-  - readchar
+  - <b>readchar</b>
     Read next charaxter in receive buffer
     
-  - readbuffer
+  - <b>readbuffer</b>
     Read the whole buffer at once
    
-  - clearbuffer
+  - <b>clearbuffer</b>
     Clear buffer, size will be 0
    
