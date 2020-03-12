@@ -36,6 +36,8 @@ Prepare NMS1250 interface
 Prepare MSX
 - On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off)
 - Download Erik Maas'Fossil driver for MSX
+or
+- Start a terminal program that is compatible with your modem/serial interface
 
 Start MSX and configure Wifi on ESP
 - Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html\>, the password is "12345678" (loose the quotes).
