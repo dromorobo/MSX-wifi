@@ -2,10 +2,10 @@
 MSX wifi (ESP8266 via RS232)
 
 Add a wifi interface to an MSX computer, using a modified NMS1250 modem cartridge. All modem specific components have been removed and an ESP8266 with a 5V adapter has been connected directly to the Z8530 chip (basically this works also for other
-modem cartridges and RS232 cartridges, as long as they are supported by Erik Maas' Fossil driver).
+modem cartridges and RS232 cartridges, however, can be used in MSX DOS only if supported by Erik Maas' Fossil driver).
 
 Hardware
-- NMS1250 modem cartridge (or other... MUST be supported by Fossil Driver)
+- NMS1250 modem cartridge (or other. MSX DOS only if supported by Fossil Driver)
 - MSX computer
 - ESP8266 with NodeMCU firmware
 - 5V adapter (or level shifters) to connect 3.3V ESP to Z8530 (or 8251, depending on cartridge)
