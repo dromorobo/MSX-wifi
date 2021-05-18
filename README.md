@@ -38,6 +38,7 @@ Prepare NMS1250 interface
 - connect ESP8266 with 5V adapter or level shifters to Z8530 (or 8251, depending on cartridge)
 
 Prepare ESP
+- Build NodeMCU firmware (how this is done is not described here, but there is lots of info available; pleas take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
 - Flash ESP8266 with NodeMCU firmware
 - (optional) Copy lua files to ESP flash filesystem
 
