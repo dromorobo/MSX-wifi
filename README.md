@@ -7,7 +7,7 @@ Another solution is to buy a BadCat Wifi MSX cartridge. This cartridge also uses
 
 (*) preferably one that is supported by Erik Maas' Fossil driver, because that makes it easier to develop your own programs.
 
-This is still under development, but it works already... http server and client, https client, domain lookup, even mdns works (meaning your MSX will automatically turn op in Finder or Explorer... so stay tuned for updates.
+This is still under development, but it works already... http server and client, https client, domain lookup, even mdns works, meaning your MSX will automatically turn op in Finder or Explorer... so stay tuned for updates.
 
 Hardware
 - NMS1250 modem cartridge (or other. MSX DOS only if supported by Fossil Driver)
