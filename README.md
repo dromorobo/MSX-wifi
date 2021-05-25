@@ -30,7 +30,7 @@ or
 
 PREPARE - NMS1250 interface
 - (optional) remove all modem components from NMS1250
-- connect ESP8266 with 5V adapter or level shifters to Z8530 (or 8251, depending on cartridge)
+- connect ESP8266 with 5V adapter or level shifters to Z8530
 
 PREPARE - ESP
 - Build NodeMCU firmware (how this is done is not described here, but there is lots of info available; pleas take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
