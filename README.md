@@ -9,27 +9,27 @@ Another solution is to buy a BadCat Wifi MSX cartridge. This cartridge also uses
 
 This is still under development, but it works already... http server and client, https client, domain lookup, even mdns works, meaning your MSX will automatically turn op in Finder or Explorer... so stay tuned for updates.
 
-Hardware
+WHAT YOU NEED - Hardware
 - NMS1250 modem cartridge (or other. MSX DOS only if supported by Fossil Driver)
 - MSX computer
 - ESP8266
-- 5V adapter (or level shifters) to connect 3.3V ESP to Z8530 (or 8251, depending on cartridge)
+- 5V adapter (or level shifters) to connect 3.3V ESP to Z8530 (or 8251, depending on cartridge). If you connect your ESP directly to the UART without 3.3V - 5V "conversion", you might damage your ESP
 
 or
 - BadCat Wifi MSX cartridge
 
-Software for ESP
+WHAT YOU NEED - Software for ESP
 - NodeMCU firmware (with tmr, http, uart, mdns modules)
-- Lua sources to be put on filesystem of ESP
+- Lua sources from this repository to be put on filesystem of ESP
 
-Software for MSX
-- Fossil driver from Erik Maas
-- Turbo Pascal 3.0
-- Sample program ESP.PAS to send commands
-- UPLOAD.PAS to upload Lua files to the ESP on the MSX
+WHAT YOU NEED - Software for MSX
+- Fossil driver from Erik Maas (See: https://hansotten.file-hunter.com/software/)
+- Turbo Pascal 3.0 (See: http://pascal.hansotten.com/delphi/turbo-pascal-on-cpm-msx-dos-and-ms-dos/)
+- Sample program ESP.PAS from this repository to send commands
+- UPLOAD.PAS from this repository to upload Lua files to the ESP on the MSX
 
 or
-- a terminal program that recognizes the interface you use
+- any terminal program that recognizes the interface you use
 
 PREPARATION
 
