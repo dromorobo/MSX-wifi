@@ -10,13 +10,10 @@ Another solution is to buy a BadCat Wifi MSX cartridge. This cartridge also uses
 This is still under development, but it works already... http server and client, https client, domain lookup, even mdns works, meaning your MSX will automatically turn op in Finder or Explorer... so stay tuned for updates.
 
 WHAT YOU NEED - Hardware
-- NMS1250 modem cartridge (or other. MSX DOS only if supported by Fossil Driver)
+- Serial Interface
+  - NMS1250 modem cartridge, an ESP8266 and 5V adapter (or level shifters) to connect 3.3V ESP to the uart (Z8530, 8251, 8250 or 16550, depending on cartridge), or
+  - BadCat Wifi MSX cartridge, which has an onboard ESP8266
 - MSX computer
-- ESP8266
-- 5V adapter (or level shifters) to connect 3.3V ESP to Z8530 (or 8251, depending on cartridge). If you connect your ESP directly to the UART without 3.3V - 5V "conversion", you might damage your ESP
-
-or
-- BadCat Wifi MSX cartridge
 
 WHAT YOU NEED - Software for ESP
 - NodeMCU firmware (with tmr, http, uart, mdns modules)
@@ -31,20 +28,18 @@ WHAT YOU NEED - Software for MSX
 or
 - any terminal program that recognizes the interface you use
 
-PREPARATION
-
-Prepare NMS1250 interface
+PREPARE - NMS1250 interface
 - (optional) remove all modem components form NMS1250
 - connect ESP8266 with 5V adapter or level shifters to Z8530 (or 8251, depending on cartridge)
 
-Prepare ESP
+PREPARE - ESP
 - Build NodeMCU firmware (how this is done is not described here, but there is lots of info available; pleas take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
 - Flash ESP8266 with NodeMCU firmware
 - (optional) Copy lua files to ESP flash filesystem
 
-Prepare MSX
-- On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off)
-- On MSX compile UPLOAD.PAS to UPLOAD.COM using Turbo Pascal 3.0 (messages off)
+PREPARE - MSX
+- On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
+- On MSX compile UPLOAD.PAS to UPLOAD.COM using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
 - Download Erik Maas'Fossil driver for MSX
 - Install Fossil driver
 - Use UPLOAD.COM to upload all Lua files to the ESP (if not done earlier in preparing the ESP)
