@@ -29,7 +29,7 @@ or
 - any terminal program that recognizes the interface you use
 
 PREPARE - NMS1250 interface
-- (optional) remove all modem components form NMS1250
+- (optional) remove all modem components from NMS1250
 - connect ESP8266 with 5V adapter or level shifters to Z8530 (or 8251, depending on cartridge)
 
 PREPARE - ESP
