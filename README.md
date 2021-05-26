@@ -1,19 +1,20 @@
 # MSX-wifi
 MSX wifi (ESP8266 via RS232)
 
-Add a wifi interface to an MSX computer, using an ESP8266 SoC. This is a very sophisticated low-cost solution that uses a serial interface to communicate with the host. It is easy to make a cartridge yourself: you just have to modify an MSX modem cartridge, such as the Philips NMS1250, but basically any modem or serial cartridge will do (*). I used an NMS1250, where I removed all modem specific components and connecting the ESP8266 with a 5V adapter directly to the Z8530 uart.
+Add a wifi interface to an MSX computer, using an ESP8266 SoC. This ESP8266 is a very sophisticated low-cost solution that uses a serial interface to communicate with the host. An MSX can become such a host. You need an MSX modem cartridge, such as the Philips NMS1250, or a serial interface, such as the NMS121x. This requires some soldering to connect the ESP. Another solution is to buy a BadCat Wifi interface; this interface already has an ESP8266 onboard. Any interface with a uart will do, but preferably one that is supported by Erik Maas' Fossil driver, because that makes it easier to use existing apps and to develop your own programs.
 
-Another solution is to buy a BadCat Wifi MSX cartridge. This cartridge also uses an ESP8266. You need to re-flash it with NodeMCU firmware.
+This is still under development, but it works already: http server and client, https client, domain lookup, even mdns works, meaning your MSX will automatically turn op in Finder or Explorer. The things an MSX can do with this ESP2866 SoC are endless... 
 
-(*) preferably one that is supported by Erik Maas' Fossil driver, because that makes it easier to develop your own programs.
-
-This is still under development, but it works already... http server and client, https client, domain lookup, even mdns works, meaning your MSX will automatically turn op in Finder or Explorer... so stay tuned for updates.
+... so stay tuned for updates.
 
 WHAT YOU NEED - Hardware
 - Serial Interface
-  - NMS1250 modem cartridge, an ESP8266 and 5V adapter (or level shifters) to connect 3.3V ESP to the uart (Z8530, 8251, 8250 or 16550, depending on cartridge), or
-  - BadCat Wifi MSX cartridge, which has an onboard ESP8266
+  - NMS1250 modem cartridge or other, and an ESP8266 SoC (ESP01) and 5V adapter (or level shifters) to connect 3.3V ESP to the uart (Z8530, 8251, 8250 or 16550, depending on cartridge), or
+  - BadCat Wifi MSX cartridge, which already has an onboard ESP8266
 - MSX computer
+  - Any MSX1 or MSX2 with MSX DOS will do
+  - (optional) MSX cartridge that can do SD-cards
+- PC/Mac with a USB-serial interface (to connect the ESP and flash it with a new firmware)
 
 WHAT YOU NEED - Software for ESP
 - NodeMCU firmware (with tmr, http, uart, mdns modules)
@@ -28,21 +29,32 @@ WHAT YOU NEED - Software for MSX
 or
 - any terminal program that recognizes the interface you use
 
-PREPARE - NMS1250 interface
-- (optional) remove all modem components from NMS1250
-- connect ESP8266 with 5V adapter or level shifters to Z8530
+WHAT YOU NEED - Software for PC/Mac
+- NodeMCU flasher, or pyflasher to flash the firmware on the ESP
+- (optional) ESPlorer to upload Lua files to the ESP 
+ 
+PREPARE - Serial Interface, choose whatever interface you have
+- NMS1250 interface
+  - (optional) remove all modem components from NMS1250
+  - Prepare the ESP (see below)
+  - connect ESP8266 with 5V adapter or level shifters to Z8530
+- BadCat Wifi interface
+  - open cartridge, and
+  - Prepare the ESP (see below) 
 
 PREPARE - ESP
-- Build NodeMCU firmware (how this is done is not described here, but there is lots of info available; pleas take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
-- Flash ESP8266 with NodeMCU firmware
-- (optional) Copy lua files to ESP flash filesystem
+- Connect the ESP to a PC/Mac using a USB-Serial interface
+- Build NodeMCU firmware (how this is done is not described here, but there is lots of info available; please take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
+- Connect the ESP to a PC/Mac, and
+  - Flash ESP8266 with NodeMCU firmware
+  - (optional) Copy Lua files to ESP flash filesystem, using ESPlorer; you may also copy the Lua files later on the MSX using the UPLOAD-app provided in this repository 
 
 PREPARE - MSX
-- On MSX compile ESP.PAS to ESP.COM using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
-- On MSX compile UPLOAD.PAS to UPLOAD.COM using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
 - Download Erik Maas'Fossil driver for MSX
-- Install Fossil driver
-- Use UPLOAD.COM to upload all Lua files to the ESP (if not done earlier in preparing the ESP)
+- Install Fossil driver, put FOSLIB.INC in a location where Turbo Pascal can find it
+- (optionally) Prepare MSX to do Lua uploads to the ESP (this is not necessary if you already uploaded the Lua files using a PC/Mac with ESPlorer)
+  - On MSX compile ESP.PAS and UPLOAD.PAS using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
+  - Use UPLOAD.COM to upload all Lua files to the ESP (if not done earlier in preparing the ESP)
 
 Start MSX and configure Wifi on ESP
 - Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html\>, the password is "12345678" (loose the quotes).

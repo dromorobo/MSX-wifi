@@ -12,29 +12,19 @@ MODE   = "server"
 
 function launch()
   -- Launch existing servers
-  if file.exists("tcp_srv.lua")
+  if file.exists("telnetd.lua")
   then
-    dofile("tcp_srv.lua")
+    dofile("telnetd.lua")
   end
 
-  if file.exists("udp_srv.lua")
+  if file.exists("seriald.lua")
   then
-    dofile("udp_srv.lua")
-  end
-  
-  if file.exists("telnet_srv.lua")
-  then
-    dofile("telnet_srv.lua")
+    dofile("seriald.lua")
   end
 
-  if file.exists("serial_srv.lua")
+  if file.exists("httpd.lua")
   then
-    dofile("serial_srv.lua")
-  end
-
-  if file.exists("http_srv.lua")
-  then
-    dofile("http_srv.lua")
+    dofile("httpd.lua")
   end
 end
 

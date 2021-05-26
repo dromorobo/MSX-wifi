@@ -6,9 +6,9 @@
 
 -- When '\r' is received, read data and process
 
-local VERSION = "0.04"
-local BPS = 9600         -- Speed of serial interface
-local EOT = 0x04         -- EOT = End of Transmission
+local VERSION = "0.07"
+local BPS = 115200       -- Speed of serial interface
+local CR  = "\n"         -- Return (CRLF)
 local what = ""
 local buffer = nil
 
@@ -56,9 +56,9 @@ uart.setup(0,BPS,8,0,1,0,1)
 
 uart.on("data", "\r",
   function(data)
-    if (string.find(data, "get ") ~= nil)
+    if (string.find(data, "show ") ~= nil)
     then
-      what = string.sub(data, 5)
+      what = string.sub(data, 6)
       trim(what)
       if (string.find(what, "ip") ~= nil)
       then
@@ -69,7 +69,7 @@ uart.on("data", "\r",
         else
           uart.write(0, "nil")
         end
-        uart.write(0, EOT) 
+        uart.write(0, CR)
     
       elseif (string.find(data, "netmask") ~= nil)
       then
@@ -80,7 +80,7 @@ uart.on("data", "\r",
         else
           uart.write(0, "nil")
         end
-        uart.write(0, EOT)
+        uart.write(0, CR)
 
       elseif (string.find(data, "speed") ~= nil)
       then
@@ -93,8 +93,25 @@ uart.on("data", "\r",
           file.close()
         end
         uart.write(0, "Running = " .. BPS .. "\n\r")
-        uart.write(0, EOT)    
+        uart.write(0, CR)    
+
+      elseif (string.find(data, "version") ~= nil)
+      then 
+        uart.write(0, VERSION)
+
+      elseif (string.find(data, "buflength") ~= nil)
+      then
+        if (buffer ~= nil)
+        then
+          uart.write(0, tostring(string.len(buffer)))
+        else
+          uart.write(0, "0")
+        end
+
+      else
+        uart.write(0, "Nothing to show")
       end
+      uart.write(0, CR)
 
     elseif (string.find(data, "set ") ~= nil)
     then
@@ -109,7 +126,7 @@ uart.on("data", "\r",
           file.close()
         end
       end
-      uart.write(0, EOT)
+      uart.write(0, CR)
 
     elseif (string.find(data, "whois ") ~= nil)
     then 
@@ -124,39 +141,12 @@ uart.on("data", "\r",
           end
         end)
       end
-      uart.write(0, EOT)
-
+      uart.write(0, CR)
     elseif (string.find(data, "restart") ~= nil)
     then 
-      uart.write(0, EOT)
+      uart.write(0, CR)
       node.restart()
-    
-    elseif (string.find(data, "show ") ~= nil)
-    then
-      what = string.sub(data, 6)
-      what = trim(what)
-      if (what ~= nil)
-      then
-        if (string.find(data, "version") ~= nil)
-        then 
-          uart.write(0, VERSION)
-
-        elseif (string.find(data, "buflength") ~= nil)
-        then
-          if (buffer ~= nil)
-          then
-            uart.write(0, tostring(string.len(buffer)))
-          else
-            uart.write(0, "0")
-          end
-        else
-          uart.write(0, "Syntax Error")
-        end
-      else
-        uart.write(0, "Nothing to show")
-      end
-      uart.write(0, EOT)
-  
+      
     elseif (string.find(data, "readchar") ~= nil)
     then
       if (buffer ~= nil)
@@ -171,7 +161,7 @@ uart.on("data", "\r",
       else
         uart.write(0, "Nothing to read")
       end
-      uart.write(0, EOT)
+      uart.write(0, CR)
 
     elseif (string.find(data, "readbuffer") ~= nil)
     then
@@ -179,26 +169,41 @@ uart.on("data", "\r",
       then
         uart.write(0, buffer)
         buffer = nil
-      else
-        uart.write(0, "Nothing to read")
       end
-      uart.write(0, EOT)
+      uart.write(0, CR)
 
     elseif (string.find(data, "clearbuffer") ~= nil)
     then
       buffer = nil
-      uart.write(0, EOT)
+      uart.write(0, CR)
 
-    elseif (string.find(data, "fetch ") ~= nil)
+    elseif (string.find(data, "start ") ~= nil)
     then 
       what = string.sub(data, 7)
+      what = trim(what)
+      if (what ~= nil)
+      then
+        if (string.find(data, "telnet") ~= nil)
+        then
+          telnet.open(what)
+          uart.write(0,"telnet started\n")
+        end
+      end
+      uart.write(0, CR)
+
+    elseif (string.find(data, "get ") ~= nil)
+    then 
+      what = string.sub(data, 5)
+      http = false
+      https = false
       if (string.find(what, "https://") ~= nil)
       then
-        what = string.sub(what, 10)
+        what = string.sub(what, 9)
         https = true
       elseif (string.find(what, "http://") ~= nil)
       then
-         what = string.sub(what, 9)
+         what = string.sub(what, 8)
+         http = true
       end
       
       if (http or https)
@@ -213,9 +218,13 @@ uart.on("data", "\r",
           host = what
           item = "/"
         end
-
         host = trim(host)
 
+        -- effe checke
+        -- uart.write(0,host)
+        -- uart.write(0,"\n")
+        -- uart.write(0,item)
+        
         if (host ~= nil)
         then
           if http
@@ -235,7 +244,7 @@ uart.on("data", "\r",
               buffer = buffer .. c
             end
           end)
-
+ 
           -- In case of connection send request
           conn:on("connection", function(sck, c)
             request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. host .. "\r\n\r\n"
@@ -246,7 +255,7 @@ uart.on("data", "\r",
           conn:connect(port,host)
         end    
       end
-      uart.write(0, EOT)
+      uart.write(0, CR)
     
     elseif (string.find(data, "help") ~= nil)
     then
@@ -262,10 +271,9 @@ uart.on("data", "\r",
         end
         file.close()
       end 
-      uart.write(0, EOT)
+      uart.write(0, CR)
               
     else 
-      uart.write(0, "Error 21")
-      uart.write(0, EOT)
+      uart.write(0, CR)
     end  
   end, 0)
