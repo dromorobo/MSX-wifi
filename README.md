@@ -43,9 +43,8 @@ PREPARE - Serial Interface, choose whatever interface you have
   - Prepare the ESP (see below) 
 
 PREPARE - ESP
-- Connect the ESP to a PC/Mac using a USB-Serial interface
-- Build NodeMCU firmware (how this is done is not described here, but there is lots of info available; please take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
-- Connect the ESP to a PC/Mac, and
+- Build NodeMCU firmware using a PC/Mac (how this is done is not described here, but there is lots of info available; please take a look at NodeMCU docs ar <https://nodemcu.readthedocs.io/en/release/>.
+- Connect the ESP to a PC/Mac using a USB-Serial interface, and
   - Flash ESP8266 with NodeMCU firmware
   - (optional) Copy Lua files to ESP flash filesystem, using ESPlorer; you may also copy the Lua files later on the MSX using the UPLOAD-app provided in this repository 
 
