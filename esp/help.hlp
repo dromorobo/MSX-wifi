@@ -1,29 +1,22 @@
 get ip
 - Get my IP address
-
 get netmask
 - Get my netmask
-
 show buflengthr
 - Show how many characters are stored in buffer
-
 readchar
 - Read next charaxter in receive buffer
-
 readbuffer
 - Read the whole buffer at once
-
 clearbuffer
 - Clear buffer, size will be 0
-
 whois <fqdn>
 - DNS resolve of <fqdn>
-
 open http://<host>/<file>
 - Fetch file via HTTP; file will be stored in buffer
-
 help
 - Show this helpfiler
-
 set speed <bps>
 - Set the startup speed in bits per second
+start telnet
+- Starts a telnet daemon on the ESP

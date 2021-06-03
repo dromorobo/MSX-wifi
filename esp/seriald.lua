@@ -1,4 +1,4 @@
--- serial_srv.lua
+-- seriald.lua
 -- Reads and interprets lines from uart and acts upon the content
 
 -- Setup uart, make permanent (last '1' makes permanent))
@@ -6,8 +6,7 @@
 
 -- When '\r' is received, read data and process
 
-local VERSION = "0.07"
-local BPS = 115200       -- Speed of serial interface
+local VERSION = "0.09"
 local CR  = "\r\n"       -- Return (CRLF)
 local what = ""
 local buffer = nil
@@ -19,7 +18,6 @@ function trim(s)
   then
     s = string.sub(s, pt_start)
   end
-            
   -- trim all trailing control characters
   pt_start = string.find(s, "%c")
   if pt_start ~= nil
@@ -38,6 +36,15 @@ function trim(s)
   return s
 end
 
+function uwriteln(s)
+  uart.write(0, s)
+  uart.write(0, CR)
+end
+
+function uwrite(s)
+  uart.write(0, s)
+end
+
 function createCallbackcmd(data)
   return function(data)
     if (string.find(data, "show ") ~= nil)
@@ -47,13 +54,10 @@ function createCallbackcmd(data)
       if (string.find(what, "ip") ~= nil)
       then
         ip, nm, gw = wifi.sta.getip()
-          if ip ~= nil
-          then
-            uart.write(0, ip .. " " .. nm .. " " .. gw)
-          else
-          uart.write(0, "nil")
-          end
-	  uart.write(0, CR)
+        if ip ~= nil
+        then
+          uwriteln(ip .. " " .. nm .. " " .. gw)
+        end
 
       elseif (string.find(data, "speed") ~= nil)
       then
@@ -62,220 +66,254 @@ function createCallbackcmd(data)
         then
           file.open("serial.cfg")
           line = file.readline()
-          uart.write(0, "Startup = " .. line .. "\r")
+          uwriteln("Startup = " .. line .. "\r")
           file.close()
         end
-        uart.write(0, "Running = " .. BPS .. "\n\r")
-        uart.write(0, CR)    
+	uart.write(0, "Running = " .. BPS .. "\r")
 
       elseif (string.find(data, "version") ~= nil)
       then 
-        uart.write(0, VERSION)
+        uwriteln(VERSION)
 
       elseif (string.find(data, "buflength") ~= nil)
       then
         if (buffer ~= nil)
         then
-          uart.write(0, tostring(string.len(buffer)))
+          uwriteln(tostring(string.len(buffer)))
         else
           uart.write(0, "0")
         end
 
       else
-        uart.write(0, "Nothing to show")
+        uwriteln("Nothing to show")
       end
-      uart.write(0, CR)
 
-      elseif (string.find(data, "set ") ~= nil)
+    elseif (string.find(data, "set ") ~= nil)
+    then
+      what = string.sub(data, 5)
+      if (string.find(what, "speed ") ~= nil)
       then
-        what = string.sub(data, 5)
-        if (string.find(what, "speed ") ~= nil)
-        then
-          speed = string.sub(what, 7)
-          if speed ~= nil
-          then -- Write the result in seial.cfg
-            file.open("serial.cfg","w+")
-            file.write(tostring(speed) .. "\n")
-            file.close()
-          end
+        speed = string.sub(what, 7)
+        if speed ~= nil
+        then -- Write the result in seial.cfg
+          file.open("serial.cfg","w+")
+          file.write(tostring(speed) .. "\n")
+          file.close()
         end
-        uart.write(0, CR)
+      end
 
-      elseif (string.find(data, "whois ") ~= nil)
-      then 
-        what = string.sub(data, 7)
-        what = trim(what)
-        if (what ~= nil)
-        then
-          net.dns.resolve(what, function(sk, ip)
-            if (ip ~= nil) 
-            then uart.write(0,ip)
-            else uart.write(0,"host not found")
-            end
-          end)
-        end
-        uart.write(0, CR)
-      elseif (string.find(data, "restart") ~= nil)
-      then 
-        uart.write(0, CR)
-        node.restart()
-      
-      elseif (string.find(data, "readchar") ~= nil)
+    elseif (string.find(data, "whois ") ~= nil)
+    then
+      what = string.sub(data, 7)
+      what = trim(what)
+      if (what ~= nil)
       then
-        if (buffer ~= nil)
-        then
-          uart.write(0, string.sub(buffer,1,1))
-          if (string.len(buffer)>1)
-          then
-            buffer = string.sub(buffer,2)
-          else
-            buffer = nil
+        net.dns.resolve(what, function(sk, ip)
+	  if (ip ~= nil)
+          then uwriteln(ip)
+          else uwriteln("host not found")
           end
+        end)
+      end
+
+    elseif (string.find(data, "restart") ~= nil)
+    then
+      node.restart()
+
+    elseif (string.find(data, "readchar") ~= nil)
+    then
+      if (buffer ~= nil)
+      then
+        uwrite(string.sub(buffer,1,1))
+        if (string.len(buffer)>1)
+        then
+          buffer = string.sub(buffer,2)
         else
-          uart.write(0, "Nothing to read")
-        end
-        uart.write(0, CR)
-
-      elseif (string.find(data, "readbuffer") ~= nil)
-      then
-        if (buffer ~= nil)
-        then
-          uart.write(0, buffer)
           buffer = nil
         end
-        uart.write(0, CR)
+      else
+        uwriteln("Nothing to read")
+      end
 
-      elseif (string.find(data, "clearbuffer") ~= nil)
+    elseif (string.find(data, "readbuffer") ~= nil)
+    then
+      if (buffer ~= nil)
       then
+        uwriteln(buffer)
         buffer = nil
-        uart.write(0, CR)
+      end
 
-      elseif (string.find(data, "start ") ~= nil)
-      then 
-        what = string.sub(data, 7)
+    elseif (string.find(data, "clearbuffer") ~= nil)
+    then
+      buffer = nil
+
+    elseif (string.find(data, "start ") ~= nil)
+    then
+      what = string.sub(data, 7)
+      what = trim(what)
+      if (what ~= nil)
+      then
+        if (string.find(data, "telnet") ~= nil)
+        then
+          local tn = require("telnetd")
+          tn.open(what)
+        end
+      end
+
+    elseif (string.find(data, "stop") ~= nil)
+    then
+      what = string.sub(data, 6)
+      what = trim(what)
+      if (what ~= nil)
+      then
+        if (string.find(data, "telnet") ~= nil)
+        then
+          if tn ~= nil
+          then
+            tn.close(what)
+          end
+        end
+      end
+
+    elseif (string.find(data, "get ") ~= nil)
+    then
+      what = string.sub(data, 5)
+      http = false
+      https = false
+      if (string.find(what, "https://") ~= nil)
+      then
+        what = string.sub(what, 9)
+        https = true
+      elseif (string.find(what, "http://") ~= nil)
+      then
+         what = string.sub(what, 8)
+         http = true
+      end
+
+        uwriteln(what)
+
+      if (http or https)
+      then
+        sloc = string.find(what, "/")
+        if (sloc ~= nil)
+        then
+          host = string.sub(what, 1, sloc-1)
+          item = string.sub(what,sloc)
+          item = trim(item)
+        else
+          host = what
+          item = "/"
+        end
+
+        host = trim(host)
+
+	    if (host ~= nil)
+        then
+          if http
+          then -- open HTTP connection
+            conn = net.createConnection(net.TCP, 0)
+            port = 80
+          else -- open HTTPS conneciton
+            conn = tls.createConnection()
+            port = 443
+          end
+
+          conn:on("receive", function(sck, c)
+	        -- if buffer == nil
+	        -- then
+	        --   buffer = c
+	        -- else
+	        --   buffer = buffer .. c
+	        -- end
+	        uwrite(c)
+          end)
+
+          -- In case of connection send request
+          conn:on("connection", function(sck, c)
+            request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. host .. "\r\n\r\n"
+            conn:send(request)
+          end)
+
+          -- Start connection
+          uwriteln(host .. " : " .. port)
+          conn:connect(port,host)
+        end
+      end
+  
+    elseif (string.find(data, "AT") ~= nil)
+    then
+      result = "OK"
+      slen = string.len(data)
+      if (slen > 2)
+      then
+        what = string.sub(data, 3)
         what = trim(what)
-        if (what ~= nil)
-        then
-          if (string.find(data, "telnet") ~= nil)
-          then
-            telnetd.open(what)
-            uart.write(0,"telnet started\n")
+        if (string.find(what, "DT") ~= nil)
+        then -- (AT) DT "<host>:<port>"
+          what = string.sub(what, 3)
+          what = trim(what)
+          if (string.find(what, "\"") ~= nil)
+          then -- (AT DT) "<host>:<port>"
+            what = string.sub(what,2)
+            ploc = string.find(what, "\"")
+            if (ploc ~= nil)
+            then -- (AT DT ") <host>:<port> (")
+              slen = string.len(what)
+              what = string.sub(what, 1, slen-1)  
+            end
+            
+            ploc = string.find(what, ":")
+            if (ploc ~= nil)
+            then
+              port = string.sub(what, ploc+1)
+              host = string.sub(what, 1, ploc-1)
+            else
+              port = 23
+              host = what
+            end
           end
-        end
-        uart.write(0, CR)
 
-      elseif (string.find(data, "get ") ~= nil)
-      then 
-        what = string.sub(data, 5)
-        http = false
-        https = false
-        if (string.find(what, "https://") ~= nil)
-        then
-          what = string.sub(what, 9)
-          https = true
-        elseif (string.find(what, "http://") ~= nil)
-        then
-           what = string.sub(what, 8)
-           http = true
-        end
-      
-        if (http or https)
-        then
-          sloc = string.find(what, "/")
-          if (sloc ~= nil)
-          then
-            host = string.sub(what, 1, sloc-1)
-            item = string.sub(what,sloc)
-            item = trim(item)
-          else
-            host = what
-            item = "/"
-          end
-          host = trim(host)
-	
+          uwriteln("Host: " .. host)
+          uwriteln("Port: " .. port)
+          
           if (host ~= nil)
           then
-            if http
-            then -- open HTTP connection
+	        if (port == 22)
+            then
+              conn = tls.createonnection()  
+            else
               conn = net.createConnection(net.TCP, 0)
-              port = 80
-            else -- open HTTPS conneciton
-              conn = tls.createConnection()
-              port = 443
             end
 
             conn:on("receive", function(sck, c)
-              if buffer == nil 
-              then
-                buffer = c
-              else
-                buffer = buffer .. c
-              end
-            end)
- 
-            -- In case of connection send request
-            conn:on("connection", function(sck, c)
-              request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. host .. "\r\n\r\n"
-              conn:send(request)
-            end)
-
-            -- Start connection
-            conn:connect(port,host)
-          end    
-        end
-        uart.write(0, CR)
-    
-      elseif (string.find(data, "ATZ") ~= nil)
-      then
-        uart.write(0, "OK")
-        uart.write(0, CR)
-    
-      elseif (string.find(data, "ATDT") ~= nil)
-      then
-        slen = string.len(data)
-        if (slen > 6)
-        then
-	      what = string.sub(data, 6, slen-2) -- lose ATDT and quotes
-	      ploc = string.find(what, ":")
-	      if (ploc ~= nil)
-	      then
-	        port = string.sub(what, ploc+1)
-	        host = string.sub(what, 1, ploc-1)
-	      else
-	        port = 23
-	        host = what
-	      end
-
-        if (host ~= nil)
-        then
-          conn = net.createConnection(net.TCP, 0)
-          conn:on("receive", function(sck, c)
             uart.write(0, c)
-          end)
+              end)
 
-	      conn:on("connection", function(sck, c)
-	        uart.write(0, "CONNECT")
-	        uart.write(0, CR)
-	        uart.on("data", 0, function(data)
-	          conn:send(data)
-	        end, 0)
-	      end)
+            conn:on("connection", function(sck, c)
+              uart.write(0, "CONNECT")
+              uart.write(0, CR)
+              uart.on("data", 0, function(data)
+                conn:send(data)
+                end, 0)
+              end)
 
-	      conn:on("disconnection", function(c)
-	        uart.on("data")
-            uart.on("data", "\r", createCallbackcmd(data), 0)
-	      end, 0)
+            conn:on("disconnection", function(c)
+	          uwriteln("NO CARRIER")
+              uart.on("data")
+              uart.on("data", "\r", createCallbackcmd(data), 0)
+              end, 0)
 
-	      -- start connection
-	      conn:connect(port, host)
- 
-        else
-          uart.write(0, "ERROR")
-          uart.write(0, CR)
+            -- start connection
+            conn:connect(port, host)
+            result = nil
+          else
+            result="ERROR"
+          end
         end
-      else 
-        uart.write(0, "ERROR")
-        uart.write(0, CR)
+        if (result ~= nil)
+        then
+          uwriteln(result)
+        end
       end
 
     elseif (string.find(data, "help") ~= nil)
@@ -286,34 +324,26 @@ function createCallbackcmd(data)
         line = file.readline()
         while (line ~= nil)
         do
-          uart.write(0, line)
-          uart.write(0, "\r")    -- compensate for LF to LFCR
+          uwrite(line)
           line = file.readline()
         end
         file.close()
-      end 
-      uart.write(0, CR)
-              
+      end
+
+    elseif (string.find(data, "stop") ~= nil)
+    then
+      file.open("stop.cfg","w+")
+      file.write("stop\n")
+      file.close()
+          
+    elseif (data == "")
+    then 
+      uwriteln("")
+
     else 
-      uart.write(0, CR)
+      uwriteln("ERROR")
     end  
   end
 end
-
-  -- Let's see if there is a config file for serial
-  if file.exists("serial.cfg")
-  then
-    file.open("serial.cfg")
-    line = file.readline()
-    BPS = tonumber(line)
-    file.close()
-  end
-
-  if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200 and BPS~=115200) 
-  then
-    BPS=115200
-  end
-  
-uart.setup(0,BPS,8,0,1,0,1)
 
 uart.on("data", "\r", createCallbackcmd(data), 0)

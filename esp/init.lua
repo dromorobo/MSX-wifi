@@ -1,22 +1,14 @@
 -- setup.lua (init.lua)
---
--- Test for MSX wifi 
---
--- Setup uart, make permanent (last '1' makes permanent))
--- (uart,bps,databits,parity,stopbits,echo,permanent = 1)
--- uart.setup(0,2400,8,0,1,0,1)
 
+local VERSION = "0.04"
 SSID   = "msx_"..node.chipid()
 PWD    = "12345678"
 MODE   = "server"
 
+local BPS = 9600 -- Standard speed of serial interface
+
 function launch()
   -- Launch existing servers
-  if file.exists("telnetd.lua")
-  then
-    dofile("telnetd.lua")
-  end
-
   if file.exists("seriald.lua")
   then
     dofile("seriald.lua")
@@ -25,7 +17,7 @@ function launch()
   if file.exists("httpd.lua")
   then
     dofile("httpd.lua")
-  end
+  end  
 end
 
 function isconnected()
@@ -68,5 +60,23 @@ else
   wifi.sta.connect()
 end
 
--- Assume we are connected, so just run the launch code.
-launch()
+-- Let's see if there is a config file for serial
+if file.exists("serial.cfg")
+then
+  file.open("serial.cfg")
+  line = file.readline()
+  BPS = tonumber(line)
+  file.close()
+end
+
+if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200 and BPS~=115200) 
+then
+  BPS=115200
+end
+
+uart.setup(0,BPS,8,0,1,1)
+
+-- Assume we are connected, check for stop.cfg, and launch code if it does not exist.
+if not(file.exists("stop.cfg"))
+then launch()
+end
