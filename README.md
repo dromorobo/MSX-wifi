@@ -56,7 +56,7 @@ PREPARE - MSX
   - Use UPLOAD.COM to upload all Lua files to the ESP (if not done earlier in preparing the ESP)
 
 Start MSX and configure Wifi on ESP
-- Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html\>, the password is "12345678" (loose the quotes).
+- Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html>, the password is "12345678" (loose the quotes).
 - When you have connected to the ESP wifi config page:
   - fill in ssid, password and leave client "empty".
   - information will be stored on ESP in wifi.cfg, so next start of ESP will ensure reconnect. (Please Note: password of wifi network is stored in clear text in wifi.cfg!!!)
@@ -72,8 +72,7 @@ or
     Show a list of commands
     
   - <b>show ip</b>
-  
-  - <b>show netmask</b>
+    Shows current ip, netmask and gateway
   
   - <b>show speed</b>
     Shows bps rate of serial interface, both running and startup-speed
@@ -85,14 +84,20 @@ or
     DNS resolve of host
     example "whois www.google.com"
   
-  - <b>fetch http://\<host\>/\<file\></b>
+  - <b>get http://\<host\>/\<file\></b>
     Open HTTP connection to \<host\> and get \<file\>
     example "fetch http://msx.org"
    
-  - <b>fetch https://\<host\>/\<file\></b>
+  - <b>get https://\<host\>/\<file\></b>
     Open HTTPS connection to \<host\> and get \<file\>
     example "fetch https://www.bliekiepedia.nl"
    
+  - start telnet
+    Start telnet daemon
+
+  - stop telnet
+    Stop telnet daemon
+
   - <b>show buflength</b>
     Show number of characters in receive buffer
   
