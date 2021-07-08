@@ -12,7 +12,8 @@ local what = ""
 local buffer = nil
 
   function trim(s)
-    return s:match'^[\s]*(.*?)[\s]*$' or ''
+    -- return s:match'^[\s]*(.*?)[\s]*$' or ''
+    return s:match"^[%s]*(.-)[%s]*$" or ''
   end
 
   function split(str, pat)
@@ -39,9 +40,10 @@ local buffer = nil
   end
 
   function split_url(str)
-     return split(str,'(.*?)[:][\/][\/](.*?)[\/](.*?)[:](.*?)$')
+     --return split(str,'(.*?)[:][\/][\/](.*?)[\/](.*?)[:](.*?)$')
+     return split(str,':\/\/')
   end
-  
+
   function uwriteln(s)
     uart.write(0, s)
     uart.write(0, CR)
@@ -55,6 +57,8 @@ local buffer = nil
     return function(data)
 
       local elements = split_parms(data)
+
+      data = trim(data)
       
       local i = 1
       while (elements[i] ~= nil)
@@ -122,7 +126,8 @@ local buffer = nil
       then
         if (elements[2] ~= nil)
         then
-          net.dns.resolve(elements[2], function(sk, ip)
+          uwriteln("name: " .. elements[2] .. ".")
+          net.dns.resolve(trim(elements[2]), function(sk, ip)
 	        if (ip ~= nil)
             then uwriteln(ip)
             else uwriteln("host not found")
@@ -182,21 +187,23 @@ local buffer = nil
       elseif (string.match(elements[1], "get") ~= nil)
       then
         local url = split_url(elements[2])
-
-        -- test
-        local i = 1
-        while (url[i] ~= nil)
-        do
-          uwriteln(url[i])
-          i = i+1
-        end
-        --
+        local protocol = url[1]
         
-        if (string.match(url[1], "https") ~= nil)
+        local uri = split(url[2], '\/')
+        local host = uri[1]
+        local item = uri[2]
+
+        if (item == nil)
+        then
+          item = "/"
+        end
+        
+
+        if (string.match(protocol, "https") ~= nil)
         then
           conn = tls.createConnection()
           port = 443
-        elseif (string.match(url[1], "http") ~= nil) -- open HTTP conneciton
+        elseif (string.match(protocol, "http") ~= nil) -- open HTTP conneciton
         then
           conn = net.createConnection(net.TCP, 0)
           port = 80
@@ -204,6 +211,13 @@ local buffer = nil
           conn = nil
           port = 0
         end
+
+        -- test
+        uwriteln("protocol: " .. protocol)
+        uwriteln("host: " .. host)
+        uwriteln("port: " .. port)
+        uwriteln("item: "   .. item)
+        --
         
         if (conn ~= nil)
         then
@@ -219,13 +233,12 @@ local buffer = nil
 
           -- In case of connection send request
           conn:on("connection", function(sck, c)
-            request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. host .. "\r\n\r\n"
+            request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. url[2] .. "\r\n\r\n"
             conn:send(request)
           end)
 
           -- Start connection
-          uwriteln(host .. " : " .. port)
-          conn:connect(port,host)
+          conn:connect(port,trim(host))
         end
   
       elseif (string.find(elements[1], "AT") ~= nil)
