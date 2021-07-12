@@ -56,295 +56,272 @@ local buffer = nil
   function createCallbackcmd(data)
     return function(data)
 
-      local elements = split_parms(data)
-
-      data = trim(data)
-      
-      local i = 1
-      while (elements[i] ~= nil)
-      do
-        uwriteln(elements[i])
-        i = i+1
-      end
-      
-      if (string.match(elements[1],"show") ~= nil)
+      if (data ~= nil)
       then
-        if (string.match(elements[2],"ip") ~= nil)
+        data = trim(data)
+        local elements = split_parms(data)
+     
+        --local i = 1
+        --while (elements[i] ~= nil)
+        --do
+        --  uwriteln(elements[i])
+        --  i = i+1
+        --end
+      
+        if (string.match(elements[1],"show") ~= nil)
         then
-          ip, nm, gw = wifi.sta.getip()
-          if ip ~= nil
+          if (string.match(elements[2],"ip") ~= nil)
           then
-            uwriteln(ip .. " " .. nm .. " " .. gw)
-          else
-            uwriteln("no ip address")
-          end
+            ip, nm, gw = wifi.sta.getip()
+            if ip ~= nil
+            then
+              uwriteln(ip .. " " .. nm .. " " .. gw)
+            else
+              uwriteln("no ip address")
+            end
 
-        elseif (string.match(elements[2], "speed") ~= nil)
-        then
-          -- Let's see if there is a config file for serial
-          if file.exists("serial.cfg")
+          elseif (string.match(elements[2], "speed") ~= nil)
           then
-            file.open("serial.cfg")
-            line = file.readline()
-            uwriteln("Startup speed = " .. line .. "\r")
-            file.close()
-          else
-            uwriteln("Startup speed = default")
-          end
+            -- Let's see if there is a config file for serial
+            if file.exists("serial.cfg")
+            then
+              file.open("serial.cfg")
+              line = file.readline()
+              uwriteln("Startup speed = " .. line .. "\r")
+              file.close()
+            else
+              uwriteln("Startup speed = default")
+            end
           
-        elseif (string.match(elements[2], "version") ~= nil)
-        then 
-          uwriteln(VERSION)
+          elseif (string.match(elements[2], "version") ~= nil)
+          then 
+            uwriteln(VERSION)
 
-        elseif (string.match(elements[2], "buflength") ~= nil)
+          elseif (string.match(elements[2], "buflength") ~= nil)
+          then
+            if (buffer ~= nil)
+            then
+              uwriteln(tostring(string.len(buffer)))
+            else
+              uart.write(0, "0")
+            end
+
+          elseif (string.match(elements[2], "stop") ~= nil)
+          then 
+            if file.exists("stop.cfg")
+            then
+              uwriteln("stop is ON")
+            else
+              uwriteln("stop is OFF")
+            end
+          else
+            uwriteln("Nothing to show")
+          end
+
+        elseif (string.match(elements[1], "set") ~= nil)
+        then
+          if (string.match(elements[2], "speed") ~= nil)
+          then
+            if (elements[3] ~= nil)
+            then -- Write the result in seial.cfg
+              file.open("serial.cfg","w+")
+              file.write(tostring(trim(elements[3])) .. "\n")
+              file.close()
+            end
+          elseif (string.match(elements[2], "stop") ~= nil)
+          then
+            file.open("stop.cfg","w+")
+            file.write("stop\n")
+            file.close()
+          end
+        
+        elseif (string.match(elements[1], "whois") ~= nil)
+        then
+          if (elements[2] ~= nil)
+          then
+            net.dns.resolve(trim(elements[2]), function(sk, ip)
+	          if (ip ~= nil)
+              then uwriteln(ip)
+              else uwriteln("host not found")
+              end
+            end)
+          end
+
+        elseif (string.match(elements[1], "restart") ~= nil)
+        then
+          node.restart()
+
+        elseif (string.match(elements[1], "readchar") ~= nil)
         then
           if (buffer ~= nil)
           then
-            uwriteln(tostring(string.len(buffer)))
-          else
-            uart.write(0, "0")
-          end
-
-        else
-          uwriteln("Nothing to show")
-        end
-
-      elseif (string.match(elements[1], "set") ~= nil)
-      then
-        if (string.match(elements[2], "speed") ~= nil)
-        then
-          speed = string.sub(what, 7)
-          if speed ~= nil
-          then -- Write the result in seial.cfg
-            file.open("serial.cfg","w+")
-            file.write(tostring(speed) .. "\n")
-            file.close()
-          end
-        end
-
-      elseif (string.match(elements[1], "whois") ~= nil)
-      then
-        if (elements[2] ~= nil)
-        then
-          uwriteln("name: " .. elements[2] .. ".")
-          net.dns.resolve(trim(elements[2]), function(sk, ip)
-	        if (ip ~= nil)
-            then uwriteln(ip)
-            else uwriteln("host not found")
+            uwrite(string.sub(buffer,1,1))
+            if (string.len(buffer)>1)
+            then
+              buffer = string.sub(buffer,2)
+            else
+              buffer = nil
             end
-          end)
-        end
-
-      elseif (string.match(elements[1], "restart") ~= nil)
-      then
-        node.restart()
-
-      elseif (string.match(elements[1], "readchar") ~= nil)
-      then
-        if (buffer ~= nil)
-        then
-          uwrite(string.sub(buffer,1,1))
-          if (string.len(buffer)>1)
-          then
-            buffer = string.sub(buffer,2)
           else
+            uwriteln("Nothing to read")
+          end
+
+        elseif (string.match(elements[1], "readbuffer") ~= nil)
+        then
+          if (buffer ~= nil)
+          then
+            uwriteln(buffer)
             buffer = nil
           end
-        else
-          uwriteln("Nothing to read")
-        end
 
-      elseif (string.match(elements[1], "readbuffer") ~= nil)
-      then
-        if (buffer ~= nil)
+        elseif (string.match(elements[1], "clearbuffer") ~= nil)
         then
-          uwriteln(buffer)
           buffer = nil
-        end
 
-      elseif (string.match(elements[1], "clearbuffer") ~= nil)
-      then
-        buffer = nil
-
-      elseif (string.match(elements[1], "start") ~= nil)
-      then
-        if (string.match(elements[2], "telnet") ~= nil)
+        elseif (string.match(elements[1], "start") ~= nil)
         then
-          local tn = require("telnetd")
-          tn.open(what)
-        end
-
-      elseif (string.match(elements[1], "stop") ~= nil)
-      then
-        if (string.match(elements[2], "telnet") ~= nil)
-        then
-          if tn ~= nil
+          if (string.match(elements[2], "telnet") ~= nil)
           then
-            tn.close(what)
+            local tn = require("telnetd")
+            tn.open(trim(elements[2]))
           end
-        end
 
-      elseif (string.match(elements[1], "get") ~= nil)
-      then
-        local url = split_url(elements[2])
-        local protocol = url[1]
-        
-        local uri = split(url[2], '\/')
-        local host = uri[1]
-        local item = uri[2]
-
-        if (item == nil)
+        elseif (string.match(elements[1], "stop") ~= nil)
         then
-          item = "/"
-        end
-        
-
-        if (string.match(protocol, "https") ~= nil)
-        then
-          conn = tls.createConnection()
-          port = 443
-        elseif (string.match(protocol, "http") ~= nil) -- open HTTP conneciton
-        then
-          conn = net.createConnection(net.TCP, 0)
-          port = 80
-        else
-          conn = nil
-          port = 0
-        end
-
-        -- test
-        uwriteln("protocol: " .. protocol)
-        uwriteln("host: " .. host)
-        uwriteln("port: " .. port)
-        uwriteln("item: "   .. item)
-        --
-        
-        if (conn ~= nil)
-        then
-          conn:on("receive", function(sck, c)
-          -- if buffer == nil
-          -- then
-          --   buffer = c
-          -- else
-          --   buffer = buffer .. c
-          -- end
-            uwrite(c)
-          end)
-
-          -- In case of connection send request
-          conn:on("connection", function(sck, c)
-            request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. url[2] .. "\r\n\r\n"
-            conn:send(request)
-          end)
-
-          -- Start connection
-          conn:connect(port,trim(host))
-        end
-  
-      elseif (string.find(elements[1], "AT") ~= nil)
-      then
-        result = "OK"
-        slen = string.len(elements[1])
-        if (slen > 2)
-        then
-          what = string.sub(elements[1], 3)
-          what = trim(what)
-          if (string.find(what, "DT") ~= nil)
-          then -- (AT) DT "<host>:<port>"
-            what = string.sub(what, 3)
-            what = trim(what)
-            if (string.find(what, "\"") ~= nil)
-            then -- (AT DT) "<host>:<port>"
-              what = string.sub(what,2)
-              ploc = string.find(what, "\"")
-              if (ploc ~= nil)
-              then -- (AT DT ") <host>:<port> (")
-                slen = string.len(what)
-                what = string.sub(what, 1, slen-1)  
-              end
-            
-              ploc = string.find(what, ":")
-              if (ploc ~= nil)
-              then
-                port = string.sub(what, ploc+1)
-                host = string.sub(what, 1, ploc-1)
-              else
-                port = 23
-                host = what
-              end
-            end
-
-            uwriteln("Host: " .. host)
-            uwriteln("Port: " .. port)
-          
-            if (host ~= nil)
+          if (string.match(elements[2], "telnet") ~= nil)
+          then
+            if tn ~= nil
             then
-              if (port == 22)
-              then
-                conn = tls.createonnection()  
-              else
-                conn = net.createConnection(net.TCP, 0)
-              end
-
-              conn:on("receive", function(sck, c)
-              uart.write(0, c)
-                end)
-
-              conn:on("connection", function(sck, c)
-                uart.write(0, "CONNECT")
-                uart.write(0, CR)
-                uart.on("data", 0, function(data)
-                  conn:send(data)
-                  end, 0)
-                end)
-
-              conn:on("disconnection", function(c)
-                uwriteln("NO CARRIER")
-                uart.on("data")
-                uart.on("data", "\r", createCallbackcmd(data), 0)
-              end, 0)
-
-              -- start connection
-              conn:connect(port, host)
-              result = nil
-             else
-              result="ERROR"
+              tn.close(trim(elements[2]))
             end
           end
+
+        elseif (string.match(elements[1], "get") ~= nil)
+        then
+          local url = split_url(elements[2])
+          local protocol = url[1]
+        
+          local uri = split(url[2], '\/')
+          local host = uri[1]
+          local item = uri[2]
+
+          if (item == nil)
+          then
+            item = "/"
+          end
+        
+          if (string.match(protocol, "https") ~= nil)
+          then
+            conn = tls.createConnection()
+            port = 443
+          elseif (string.match(protocol, "http") ~= nil) -- open HTTP conneciton
+          then
+            conn = net.createConnection(net.TCP, 0)
+            port = 80
+          else
+            conn = nil
+            port = 0
+          end
+        
+          if (conn ~= nil)
+          then
+            conn:on("receive", function(sck, c)
+              -- if buffer == nil
+              -- then
+              --   buffer = c
+              -- else
+              --   buffer = buffer .. c
+              -- end
+              uwrite(c)
+            end)
+
+            -- In case of connection send request
+            conn:on("connection", function(sck, c)
+              local request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. url[2] .. "\r\n\r\n"
+              conn:send(request)
+            end)
+
+            -- Start connection
+            conn:connect(port,trim(host))
+          end
+
+        elseif (string.find(data, "ATZ") ~= nil)
+        then
+          uwriteln("OK")
+  
+        elseif (string.find(data, "ATDT") ~= nil)
+        then
+          host, port = string.match(data, 'ATDT\"(.-):(.-)\"')
+          
+          if (port == nil)
+          then 
+            port = 23
+          else
+            port = tonumber(port)
+          end
+          
+          if (host ~= nil)
+          then
+            if (port == 22)
+            then
+              conn = tls.createonnection()  
+            else
+              conn = net.createConnection(net.TCP, 0)
+            end
+
+            conn:on("receive", function(sck, c)
+              uart.write(0, c)
+            end)
+
+            conn:on("connection", function(sck, c)
+              uart.write(0, "CONNECT")
+              uart.write(0, CR)
+              uart.on("data", 0, function(data)
+                conn:send(data)
+              end, 0)
+            end)
+
+            conn:on("disconnection", function(c)
+              uwriteln("NO CARRIER")
+              uart.on("data")
+              uart.on("data", "\r", createCallbackcmd(data), 0)
+            end, 0)
+
+            -- start connection
+            conn:connect(port, host)
+            result = nil
+          else
+            result="ERROR"
+          end
+        
           if (result ~= nil)
           then
             uwriteln(result)
           end
-        end
 
-      elseif (string.match(elements[1], "help") ~= nil)
-      then
-        if file.exists("help.hlp")
+        elseif (string.match(elements[1], "help") ~= nil)
         then
-          file.open("help.hlp")
-          line = file.readline()
-          while (line ~= nil)
-          do
-            uwrite(line)
+          if file.exists("help.hlp")
+          then
+            file.open("help.hlp")
             line = file.readline()
+            while (line ~= nil)
+            do
+              uwrite(line)
+              line = file.readline()
+            end
+            file.close()
           end
-          file.close()
-        end
-
-      elseif (string.match(elements[1], "stop") ~= nil)
-      then
-        file.open("stop.cfg","w+")
-        file.write("stop\n")
-        file.close()
           
-      elseif (data == "")
-      then 
-        uwriteln("")
-
-      else 
-        uwriteln("ERROR")
-      end  
+        elseif (data == "")
+        then 
+          uwriteln("")
+  
+        else 
+          uwriteln("ERROR")
+        end  
+      end
     end
   end
-
+  
 uart.on("data", "\r", createCallbackcmd(data), 0)

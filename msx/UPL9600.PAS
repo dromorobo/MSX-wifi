@@ -1,4 +1,4 @@
-PROGRAM Upload;
+PROGRAM Upload9600;
 
 {$I FOSLIB.INC}
 {
@@ -34,18 +34,18 @@ BEGIN
   IF TestDriver=TRUE THEN
   BEGIN
     Write(char(12));
-    Set_Speed (11,11); {115200 baud}
+    Set_Speed (6,6); {9600 baud}
     InitRS232;
 
     { Read filename }
     Writeln('FileName: ');
     Readln(FileName);
-    Assign(InputFile, FileName + '.lua');
+    Assign(InputFile, FileName);
     Reset(InputFile);
 
     { First tell ESP to open the file for writing }
     SendString('file.open("');
-    SendString(FileName);SendString('.lua');
+    SendString(FileName);
     SendString('", "w")');
 
     { Read lines and send them to ESP }
@@ -88,4 +88,4 @@ BEGIN
   END
   ELSE WriteLn ('*** RS232 driver not found!',char(7));
 END.
-
+

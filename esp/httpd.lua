@@ -25,13 +25,13 @@ http_srv:listen(80,function(conn)
       if uri == "" 
       then 
         -- nothing found, assume default = index.html
-        tgtfile = "index.html" 
+        tgtfile = "index.htm" 
       else
         tgtfile = uri
       end
        
       -- Check for .html or .ico or .png
-      if (string.find(tgtfile, ".html")
+      if (string.find(tgtfile, ".htm")
           or string.find(tgtfile, ".ico")
           or string.find(tgtfile, ".png") ~= nil)
       then
