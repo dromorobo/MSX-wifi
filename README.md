@@ -79,7 +79,13 @@ or
     
   - <b>set speed \<bps\></b>
     Sets the startup-speed. Will be active after next restart
+
+  - <b>set stop</b>
+    Enables interrupt of startup sequence to allow access to Lua, by creating a file stop.cfg. Will be active after restart. Can be disabled by removing stop.cfg from the ESP file system
   
+  - <b>show stop</b>
+    Shows the status of startup sequence, ON is active (i.e. a file stop.cfg exists on the file system), and OFF is inactive
+
   - <b>whois \<host\></b>
     DNS resolve of host
     example "whois www.google.com"
@@ -92,10 +98,10 @@ or
     Open HTTPS connection to \<host\> and get \<file\>
     example "fetch https://www.bliekiepedia.nl"
    
-  - start telnet
+  - <b>start telnet</b>
     Start telnet daemon
 
-  - stop telnet
+  - <b>stop telnet</b>
     Stop telnet daemon
 
   - <b>show buflength</b>
