@@ -52,8 +52,8 @@ PREPARE - MSX
 - Download Erik Maas'Fossil driver for MSX
 - Install Fossil driver, put FOSLIB.INC in a location where Turbo Pascal can find it
 - (optionally) Prepare MSX to do Lua uploads to the ESP (this is not necessary if you already uploaded the Lua files using a PC/Mac with ESPlorer)
-  - On MSX compile ESP.PAS and UPLOAD.PAS using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
-  - Use UPLOAD.COM to upload all Lua files to the ESP (if not done earlier in preparing the ESP)
+  - On MSX compile ESP.PAS, UPL9600.PAS and UPL115K.PAS using Turbo Pascal 3.0 (messages off); you may want to change the bitrate first in the source code (it is "hardcoded" in the current version)
+  - Use UPLxxxx.COM to upload all files (*.lua, *.htm and help.hlp) to the ESP
 
 Start MSX and configure Wifi on ESP
 - Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html>, the password is "12345678" (loose the quotes).
