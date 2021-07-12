@@ -56,10 +56,10 @@ PREPARE - MSX
   - Use UPLxxxx.COM to upload all files (*.lua, *.htm and help.hlp) to the ESP
 
 Start MSX and configure Wifi on ESP
-- Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.html>, the password is "12345678" (loose the quotes).
+- Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.htm>, the password is "12345678" (lose the quotes).
 - When you have connected to the ESP wifi config page:
   - fill in ssid, password and leave client "empty".
-  - information will be stored on ESP in wifi.cfg, so next start of ESP will ensure reconnect. (Please Note: password of wifi network is stored in clear text in wifi.cfg!!!)
+  - information will be stored on ESP, so next start of ESP will ensure reconnect. (Please Note: password of wifi network is stored in clear text)
   
 USAGE
 - Start MSX, install Fossil driver and Run ESP.COM with one of the following commands
