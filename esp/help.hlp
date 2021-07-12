@@ -2,23 +2,17 @@ show ip
 - Show ip, netmask and gateway
 show speed
 - Show startup speed of uart (if set)
-show buflength
-- Show how many characters are stored in buffer
 start telnet / stop telnet
 - Start or stop telnet daemon
-readchar
-- Read next character in receive buffer
-readbuffer
-- Read the whole buffer at once
-clearbuffer
-- Clear buffer, size will be 0
 whois <fqdn>
 - DNS resolve of <fqdn>
 get http://<host>/<file>
 - Get file via HTTP; file will be stored in buffer
-help
-- Show this helpfiler
 set speed <bps>
 - Set the startup speed in bits per second
+set stop / show stop
+- Enable or show status of interrupt of automatic startup
 restart
 - Restart ESP
+help
+- Show this helpfile
