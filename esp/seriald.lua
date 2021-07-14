@@ -252,7 +252,7 @@ local command = nil
         conn:on("disconnection", function(c)
           uwriteln("NO CARRIER")
           uart.on("data")
-          uart.on("data", "\r", createCallbackcmd(data), 0)
+          uart.on("data", 0, createCallbackcmd(data), 0)
         end, 0)
 
         -- start connection
