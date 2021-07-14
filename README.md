@@ -104,17 +104,5 @@ or
   - <b>stop telnet</b>
     Stop telnet daemon
 
-  - <b>show buflength</b>
-    Show number of characters in receive buffer
-  
-  - <b>readchar</b>
-    Read next charaxter in receive buffer
-    
-  - <b>readbuffer</b>
-    Read the whole buffer at once
-   
-  - <b>clearbuffer</b>
-    Clear buffer, size will be 0
-
   - <b>restart</b>
     Restarts ESP
