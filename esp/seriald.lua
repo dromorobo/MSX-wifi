@@ -4,7 +4,7 @@
 -- Setup uart, make permanent (last '1' makes permanent))
 -- (uart,bps,databits,parity,stopbits,echo,permanent = 1)
 
-local VERSION = "0.10"
+local VERSION = "0.11"
 local CR  = "\r\n"       -- Return (CRLF)
 local command = nil
 
@@ -143,7 +143,7 @@ local command = nil
         if (string.match(elements[2], "telnet") ~= nil)
         then
           local tn = require("telnetd")
-          tn.open(trim(elements[2]))
+          tn.open()
         end
       end
       
@@ -153,9 +153,9 @@ local command = nil
       then
         if (string.match(elements[2], "telnet") ~= nil)
         then
-          if tn ~= nil
+          if (tn ~= nil)
           then
-            tn.close(trim(elements[2]))
+            tn.close()
           end
         end
       end
@@ -166,46 +166,55 @@ local command = nil
       then
         local url = split_url(elements[2])
         local protocol = url[1]
+        local uri = url[2]
         
-        local uri = split(url[2], '\/')
-        local host = uri[1]
-        local item = uri[2]
+        if (protocol ~= nil)
+        then
+          if (string.match(protocol, "http") ~= nil)
+          then
+            if (string.match(protocol, "https") ~= nil)
+            then
+              conn = tls.createConnection()
+              port = 443
+            else
+              conn = net.createConnection(net.TCP, 0)
+              port = 80
+            end
+          else
+            conn = nil
+            port = 0
+          end
 
-        if (item == nil)
-        then
-          item = "/"
-        end
-        
-        if (string.match(protocol, "https") ~= nil)
-        then
-          conn = tls.createConnection()
-          port = 443
-        elseif (string.match(protocol, "http") ~= nil) -- open HTTP conneciton
-        then
-          conn = net.createConnection(net.TCP, 0)
-          port = 80
-        else
-          conn = nil
-          port = 0
-        end
-        
-        if (conn ~= nil)
-        then
-          conn:on("receive", function(sck, c)
-            uwrite(c)
-          end)
+          if (uri ~= nil)
+          then -- split uri into host / item
+            local urix = split(uri, '\/')
+            local host = urix[1]
+            local item = urix[2]
+  
+            if (item == nil)
+            then
+              item = "/"
+            end
+          
+            if (conn ~= nil)
+            then
+              conn:on("receive", function(sck, c)
+                uwrite(c)
+              end)
 
-          -- In case of connection send request
-          conn:on("connection", function(sck, c)
-            local request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. url[2] .. "\r\n\r\n"
-            conn:send(request)
-          end)
+              -- In case of connection send request
+              conn:on("connection", function(sck, c)
+                local request = "GET " .. item .. " HTTP/1.1\r\nHost: " .. url[2] .. "\r\n\r\n"
+                conn:send(request)
+              end)
 
-          -- Start connection
-          conn:connect(port,trim(host))
+              -- Start connection
+              conn:connect(port,trim(host))
+            else
+              uwriteln("Nothing to get")
+            end
+          end
         end
-      else
-        uwriteln("Nothing to get")
       end
       
     elseif (string.find(data, "atz") ~= nil)
