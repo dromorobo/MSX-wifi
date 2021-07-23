@@ -1,7 +1,7 @@
 -- setup.lua (init.lua)
 
-local VERSION = "0.04"
-SSID   = "msx_"..node.chipid()
+local VERSION = "0.05"
+SSID   = "dmr_"..node.chipid()
 PWD    = "12345678"
 MODE   = "server"
 
@@ -71,12 +71,12 @@ end
 
 if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200 and BPS~=115200) 
 then
-  BPS=115200
+  BPS=9600
 end
 
 uart.setup(0,BPS,8,0,1,1)
 
--- Assume we are connected, check for stop.cfg, and launch code if it does not exist.
+-- Assume we are connected. If a file <stop.cfg> exists abort, otherwise launch code.
 if not(file.exists("stop.cfg"))
 then launch()
 end
