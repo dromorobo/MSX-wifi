@@ -64,11 +64,6 @@ The things an MSX can do with this ESP2866 SoC are endless...
 <b>USAGE</b>
 - Start MSX
 
-- Connect the ESP to your home Wifi network (you only need to do this once)
-  - Initially the ESP creates its own Wifi Access Point (named "dmr_xxxxxx"). You can connect to this Access Point with any browser on your PC/Mac. The password is "12345678" without the quotes. 
-  - After you connect, browse to the configuration page of the ESP at \<http://192.168.4.1/config.htm> and fill in ssid (i.e. the name of your wifi network at home), password and leave client/server "empty".
-  - The information will be stored on ESP, so the ESP automatically reconnect when restarted (Please Note: password of your wifi network is stored in clear text).
-  
 - Run Fossil driver (depending on your terminal program) and 
 - Run your terminal program
 
@@ -77,6 +72,12 @@ The things an MSX can do with this ESP2866 SoC are endless...
   - <b>help</b>
     Show a list of commands
     
+  - <b>set wifi \<ssid\> \<password\></b>
+    Set wifi configuration
+
+  - <b>show wifi</b>
+    Show wifi configuration
+
   - <b>show ip</b>
     Shows current ip, netmask and gateway
   
@@ -108,7 +109,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
     Start telnet server to accept <i>incoming</i> telnet-connections
 
   - <b>stop telnet</b>
-    Stop telnet daemon
+    Stop telnet server
 
   - <b>restart</b>
     Restarts ESP

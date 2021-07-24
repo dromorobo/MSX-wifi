@@ -1,5 +1,7 @@
 show ip
 - Show ip, netmask and gateway
+show wifi
+- Show wifi configuration
 show speed
 - Show startup speed of uart (if set)
 start telnet / stop telnet
@@ -8,11 +10,11 @@ whois <fqdn>
 - DNS resolve of <fqdn>
 get http://<host>/<file>
 - Get file via HTTP; file will be stored in buffer
+help
+- Show this helpfiler
 set speed <bps>
 - Set the startup speed in bits per second
-set stop / show stop
-- Enable or show status of interrupt of automatic startup
+set wifi <ssid> <password>
+- Configure wifi
 restart
 - Restart ESP
-help
-- Show this helpfile
