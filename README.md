@@ -28,7 +28,11 @@ WHAT YOU NEED - Software for ESP
 WHAT YOU NEED - Software for MSX
 - Fossil driver from Erik Maas (See: https://hansotten.file-hunter.com/software/)
 - Turbo Pascal 3.0 (See: http://pascal.hansotten.com/delphi/turbo-pascal-on-cpm-msx-dos-and-ms-dos/)
-- any MSX terminal program that recognizes the interface you use (e.g. ERIX)
+- Any MSX terminal program that recognizes the interface you use, for example
+  - ERIX
+  - MODRS
+  - If you have RS232 BASIC for your interface: _COMTERM, or
+  - ESP.COM - in this repository - is a very simple Terminal Program, written in Pascal
 
 WHAT YOU NEED - Software for PC/Mac
 - NodeMCU flasher, or pyflasher to flash the firmware on the ESP
@@ -60,25 +64,19 @@ PREPARE - MSX
   - On MSX compile ESP.PAS, UPL9600.PAS and UPL115K.PAS using Turbo Pascal 3.0 (messages off); if you prefer another bps rate, you must change the bitrate in the source code
   - Use UPLxxxx.COM to upload files (*.lua, *.htm and help.hlp) to the ESP
 
-Start MSX and configure Wifi on ESP
-- Initially the ESP creates its own Wifi AP. You can connect to this AP using a browser. Changing the wifi setting can be done via a config.html to be found via \<http://192.168.4.1/config.htm>, the password is "12345678" (lose the quotes).
-- When you have connected to the ESP wifi config page:
-  - fill in ssid, password and leave client "empty".
-  - information will be stored on ESP, so next start of ESP will ensure reconnect. (Please Note: password of wifi network is stored in clear text)
-  
 USAGE
-- Start MSX, install Fossil driver and run a terminal program with one of the commands described below
-  - ESP.COM - in this repository - is a very simple Terminal Program, written in Pascal
-  - ERIX.COM
+- Start MSX
 
-or use another MSX terminal program that fits your hardware
-  - MODRS
+- Connect the ESP to your home Wifi network (you only need to do this once)
+  - Initially the ESP creates its own Wifi Access Point (named "dmr_xxxxxx"). You can connect to this Access Point with any browser on your PC/Mac. The password is "12345678" without the quotes. 
+  - After you connect, browse to the configuration page of the ESP at \<http://192.168.4.1/config.htm> and fill in ssid (i.e. the name of your wifi network at home), password and leave client/server "empty".
+  - The information will be stored on ESP, so the ESP automatically reconnect when restarted (Please Note: password of your wifi network is stored in clear text).
+  
+- Run Fossil driver (depending on your terminal program) and 
+- Run your terminal program
 
-or use a built-in terminal program, depending on the hardware you use
-  - MT Telcom II has its own Terminal Program built in
-  - Use _COMINI and _COMTERM in case your interface supports RS232 BASIC
+- You can type in any of the following commands (characters are echoed back by the ESP; if you see "garbage" when you type, probably the bps-rate is incorrect, try setting a different speed; if you do not see anything, the ESP may not be connected properly).
 
-- Commands
   - <b>help</b>
     Show a list of commands
     
@@ -92,7 +90,7 @@ or use a built-in terminal program, depending on the hardware you use
     Sets the startup-speed. Will be active after next restart
 
   - <b>set stop</b>
-    Enables interrupt of startup sequence to allow access to Lua, by creating a file stop.cfg. Will be active after restart. Can be disabled by removing stop.cfg from the ESP file system
+    Disables automatic startup of the Lua code on the ESP. Will be active after restart. You can then command the ESP via its built-in Lua commands. If you want to automatically start the Lua code again you must remove the file "stop.cfg" from the ESP file system (use: file.remove("stop.cfg") in Lua).
   
   - <b>show stop</b>
     Shows the status of startup sequence, ON is active (i.e. a file stop.cfg exists on the file system), and OFF is inactive
