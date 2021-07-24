@@ -56,7 +56,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
   - Prepare the ESP (described above)
 
 <b>PREPARE - MSX</b>
-- Install Fossil driver, put FOSLIB.INC in a location where Turbo Pascal can find it
+- Install your Terminal program and - if required - install Fossil driver, and put FOSLIB.INC in a location where Turbo Pascal can find it
 - (optionally) Prepare MSX to do Lua uploads to the ESP (this only necessary if you want to develop/change Lua files using your MSX)
   - On MSX compile ESP.PAS, UPL9600.PAS and UPL115K.PAS using Turbo Pascal 3.0 (messages off); if you prefer another bps rate, you must change the bitrate in the source code
   - Use UPLxxxx.COM to upload files (*.lua, *.htm and help.hlp) to the ESP
@@ -105,7 +105,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
     example "get https://www.bliekiepedia.nl"
    
   - <b>start telnet</b>
-    Start telnet daemon
+    Start telnet server to accept <i>incoming</i> telnet-connections
 
   - <b>stop telnet</b>
     Stop telnet daemon
