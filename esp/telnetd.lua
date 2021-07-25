@@ -33,7 +33,6 @@ local function telnet_session(socket)
 end
 
 function M.open(this, port)
-  local uwrite = uart.write
 
   if (wifi.sta.status() == wifi.STA_GOTIP) 
   then
@@ -44,7 +43,10 @@ function M.open(this, port)
 end
 
 function M.close(this)
-  if this.svr then this.svr:close() end
+  if this.svr
+  then
+    this.svr:close() 
+  end
   package.loaded[modname] = nil
 end
 
