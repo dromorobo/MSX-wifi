@@ -96,14 +96,13 @@ The things an MSX can do with this ESP2866 SoC are endless...
   - <b>whois \<host\></b>
     DNS resolve of host
     example "whois www.google.com"
+
+  - <b>ping \<host\></b>
+    Sends five echo requests to host (fqdn or ip)
   
   - <b>get http://\<host\>/\<file\></b>
     Open HTTP connection to \<host\> and get \<file\>
     example "get http://msx.org"
-   
-  - <b>get https://\<host\>/\<file\></b>
-    Open HTTPS connection to \<host\> and get \<file\>
-    example "get https://www.bliekiepedia.nl"
    
   - <b>start telnet</b>
     Start telnet server to accept <i>incoming</i> telnet-connections
