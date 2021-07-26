@@ -11,9 +11,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
 
 <b> WHAT YOU NEED - Hardware</b>
 - MSX cartridge with UART / Serial Interface, such as:
-  - NMS1250 modem cartridge, 
-  - NMS121x serial adapter
-  - MT Telcom II (not supported by Fossil Driver)
+  - NMS1250, NMS121x, MT Telcom II, or
   - BadCat Wifi MSX cartridge (this one already has an onboard ESP8266)
 - ESP8266 SoC (ESP01) and 5V adapter (or level shifters) to connect 3.3V ESP to the uart
 - MSX computer
