@@ -8,6 +8,8 @@ start telnet / stop telnet
 - Start or stop telnet daemon
 whois <fqdn>
 - DNS resolve of <fqdn>
+ping <host>
+- Send five icmp echo requests to <host> (fqdn or ip)
 get http://<host>/<file>
 - Get file via HTTP; file will be stored in buffer
 help

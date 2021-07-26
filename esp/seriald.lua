@@ -1,7 +1,7 @@
 -- seriald.lua
 -- Reads and interprets lines from uart and acts upon the content
 
-local VERSION = "0.13"
+local VERSION = "0.14"
 local CR  = "\r\n"       -- Return (CRLF)
 local command = nil
 
@@ -86,7 +86,6 @@ local command = nil
         then 
           ssid, password, bssid_set, bssid=wifi.sta.getconfig()
           print("\nCurrent Station configuration:\nSSID : "..ssid
-                .."\nBSSID_set  : "..bssid_set
                 .."\nBSSID: "..bssid.."\n")
           ssid, password, bssid_set, bssid=nil, nil, nil, nil
 
@@ -153,6 +152,20 @@ local command = nil
         end)
       end
 
+    elseif (string.match(elements[1], "ping") ~= nil)
+    then
+      if (elements[2] ~= nil)
+      then
+        net.ping(elements[2], 5, function (b, ip, sq, tm) 
+          if ip 
+          then
+            uwriteln(("%d bytes from %s, icmp_seq=%d time=%dms"):format(b, ip, sq, tm)) 
+          else 
+            uwrite("Invalid IP address")
+          end 
+        end)
+      end
+
     elseif (string.match(elements[1], "restart") ~= nil)
     then
       node.restart()
@@ -163,8 +176,8 @@ local command = nil
       then
         if (string.match(elements[2], "telnet") ~= nil)
         then
-          local tn = require("telnetd")
-          tn.open()
+          tn = require("telnetd")
+          tn:open()
         end
       end
       
@@ -176,7 +189,7 @@ local command = nil
         then
           if (tn ~= nil)
           then
-            tn.close()
+            tn:close()
           end
         end
       end
@@ -296,7 +309,7 @@ local command = nil
         line = file.readline()
         while (line ~= nil)
         do
-          uwrite(line)
+          uwriteln(line)
           line = file.readline()
         end
         file.close()

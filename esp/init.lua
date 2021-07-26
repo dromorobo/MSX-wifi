@@ -1,11 +1,14 @@
 -- setup.lua (init.lua)
 
-local VERSION = "0.06"
+local VERSION = "0.07"
 local BPS = 9600 -- Standard speed of serial interface
 
 function launch()
   -- Launch seriald
-  if file.exists("seriald.lua")
+  if file.exists("seriald.lc")
+  then
+    dofile("seriald.lc")
+  elseif file.exists("seriald.lua")
   then
     dofile("seriald.lua")
   end 
