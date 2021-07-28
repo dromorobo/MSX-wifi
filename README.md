@@ -27,8 +27,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
 - Fossil driver from Erik Maas (See: https://hansotten.file-hunter.com/software/)
 - Turbo Pascal 3.0 (See: http://pascal.hansotten.com/delphi/turbo-pascal-on-cpm-msx-dos-and-ms-dos/)
 - Any MSX terminal program that recognizes the interface you use, for example
-  - ERIX
-  - MODRS
+  - ERIX, MODRS, or
   - If you have RS232 BASIC for your interface: _COMTERM, or
   - ESP.COM - in this repository - is a very simple Terminal Program, written in Pascal
 
@@ -84,12 +83,6 @@ The things an MSX can do with this ESP2866 SoC are endless...
     
   - <b>set speed \<bps\></b>
     Sets the startup-speed. Will be active after next restart
-
-  - <b>set stop</b>
-    Disables automatic startup of the Lua code on the ESP. Will be active after restart. You can then command the ESP via its built-in Lua commands. If you want to automatically start the Lua code again you must remove the file "stop.cfg" from the ESP file system (use: file.remove("stop.cfg") in Lua).
-  
-  - <b>show stop</b>
-    Shows the status of startup sequence, ON is active (i.e. a file stop.cfg exists on the file system), and OFF is inactive
 
   - <b>whois \<host\></b>
     DNS resolve of host
