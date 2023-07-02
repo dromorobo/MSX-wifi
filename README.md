@@ -27,9 +27,9 @@ The things an MSX can do with this ESP2866 SoC are endless...
 - Fossil driver from Erik Maas (See: https://hansotten.file-hunter.com/software/)
 - Turbo Pascal 3.0 (See: http://pascal.hansotten.com/delphi/turbo-pascal-on-cpm-msx-dos-and-ms-dos/)
 - Any MSX terminal program that recognizes the interface you use, for example
-  - ERIX, MODRS, or
+  - If you have an MSX2: ERIX, MODRS, CACIS or
   - If you have RS232 BASIC for your interface: _COMTERM, or
-  - ESP.COM - in this repository - is a very simple Terminal Program, written in Pascal
+  - TERM.PAS - in this repository - is a very simple Terminal Program, written in Pascal
 
 <b>WHAT YOU NEED - Software for PC/Mac</b>
 - NodeMCU flasher, or pyflasher to flash the firmware on the ESP (for details on starting with the ESP see https://nodemcu.readthedocs.io/en/release/getting-started/)
