@@ -1,6 +1,6 @@
 -- setup.lua (init.lua)
 
-local VERSION = "0.07"
+local VERSION = "0.08"
 local BPS = 9600 -- Standard speed of serial interface
 
 function launch()
@@ -23,7 +23,7 @@ then
   file.close()
 end
 
-if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200 and BPS~=115200) 
+if (BPS~=1200 and BPS~=2400 and BPS~=9600 and BPS~=19200 and BPS~=57600 and BPS~=115200) 
 then
   BPS=9600
 end
