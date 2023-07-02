@@ -15,7 +15,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
   - BadCat Wifi MSX cartridge (this one already has an onboard ESP8266)
 - ESP8266 SoC (ESP01) and 5V adapter (or level shifters) to connect 3.3V ESP to the uart
 - MSX computer
-  - MSX2 with MSX DOS2 is preferred, but MSX1 will do 
+  - MSX2 with MSX DOS2 is preferred; you can make it work on an MSX1, but - depending on the interface you have - results may vary (and it may not be very usable on an MSX1) 
   - (optional) MSX cartridge that can do SD-cards; not required, but makes life easier
 - PC/Mac with a USB interface
 - USB/Serial cable/interface to connect the ESP to your PC/Mac
