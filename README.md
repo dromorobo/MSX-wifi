@@ -15,7 +15,7 @@ The things an MSX can do with this ESP2866 SoC are endless...
   - BadCat Wifi MSX cartridge (this one already has an onboard ESP8266)
 - ESP8266 SoC (ESP01) and 5V adapter (or level shifters) to connect 3.3V ESP to the uart
 - MSX computer
-  - MSX2 with MSX DOS2 is preferred; you can make it work on an MSX1, but - depending on the interface you have - results may vary (and it may not be very usable on an MSX1) 
+  - MSX2 with MSX DOS2 is preferred. Please note that you can make it work on an MSX1, but - depending on the interface you have - results may vary; for example compiling the *.PAS source files on an MSX1 with mass storage device such as a Carnivore 2 or an SD512 cartridge seems to fail. However, if you compile them on an MSX-emulator or on an MSX2 and then run the resulting *.COM files on an MSX1 works ok (I've tested it on CocoaMSX/macOS, on an Altera DE1-SoC FPGA with a European MSX1 core and on a Philips VG8235 with an SD512 running Nextor from 8bits4ever). It will also work on an MSX1 or MSX2 with built-in terminal software - for example the Telcom-II ROM software. In any case, even if you make it work it may not be very usable on an MSX1, apart from being a fun project to do ;-). 
   - (optional) MSX cartridge that can do SD-cards; not required, but makes life easier
 - PC/Mac with a USB interface
 - USB/Serial cable/interface to connect the ESP to your PC/Mac
