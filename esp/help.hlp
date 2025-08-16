@@ -1,29 +1,22 @@
-get ip
-- Get my IP address
-
-get netmask
-- Get my netmask
-
-show buflengthr
-- Show how many characters are stored in buffer
-
-readchar
-- Read next charaxter in receive buffer
-
-readbuffer
-- Read the whole buffer at once
-
-clearbuffer
-- Clear buffer, size will be 0
-
+show ip
+- Show ip, netmask and gateway
+show wifi
+- Show wifi configuration
+show speed
+- Show startup speed of uart (if set)
+start telnet / stop telnet
+- Start or stop telnet daemon
 whois <fqdn>
 - DNS resolve of <fqdn>
-
-open http://<host>/<file>
-- Fetch file via HTTP; file will be stored in buffer
-
+ping <host>
+- Send five icmp echo requests to <host> (fqdn or ip)
+get http://<host>/<file>
+- Get file via HTTP; file will be stored in buffer
 help
 - Show this helpfiler
-
 set speed <bps>
 - Set the startup speed in bits per second
+set wifi <ssid> <password>
+- Configure wifi
+restart
+- Restart ESP
